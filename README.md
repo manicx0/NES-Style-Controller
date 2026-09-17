@@ -1,31 +1,44 @@
-# NES-Style Modernized Wireless Controller
+### NES-Style Modern Controller — Component List & Wiring Overview
 
-A custom-built rectangular controller inspired by the NES 004 form factor, 
-featuring dual analog sticks, a built-in OLED settings display, and 
-dual-radio wireless connectivity (BLE/WiFi via ESP32 + 2.4GHz NRF24L01 link).
+An SoC with built-in WiFi+Bluetooth handles wireless duty, with an optional dedicated 2.4GHz nRF radio for a low-latency "wired-like" mode — a common approach in hobby gamepad builds since no single chip natively does WiFi+BT+proprietary-nRF all at once.
 
-![Controller Photo](docs/images/controller-hero.jpg)
+### Component List
 
-## Features
+**Brain**
 
-- 🎮 Dual analog joysticks (no L1/L2/R1/R2/R3/L3 — clean rectangular NES-style layout)
-- 📟 1.3" OLED display for in-controller settings (volume, connection mode, battery %)
-- 📡 Dual wireless: Bluetooth/WiFi (ESP32) + dedicated 2.4GHz link (NRF24L01+PA+LNA)
-- 🔋 Rechargeable LiPo battery with USB-C charging (TP4056)
-- 🔧 Fully open-source hardware — schematics, PCB layout, and firmware included
+- Main MCU/SoC with built-in WiFi + Bluetooth (e.g. an ESP32-class chip) — handles button/stick polling, display driving, and wireless output
+- Optional secondary 2.4GHz radio module (nRF24L01+ style) for a dedicated low-latency "nRF mode," wired to the MCU over SPI
 
-## Status
+**Input**
 
-🚧 **Work in progress** — currently in [schematic / PCB layout / firmware] stage.
+- 2x analog stick modules (dual-potentiometer + click-button type, PSP/Joy-Con style)
+- D-pad (4-way cross, either 4 discrete tactile switches or a single 4/8-way rocker module)
+- 4x face buttons (tactile switches)
+- Start/Select buttons
+- 1-2x dedicated "menu/mode" buttons for navigating the mini display's settings UI (can double up with Start/Select if you want to save parts)
+- Tactile switch caps / keycaps for the above
 
-## Hardware
+**Display**
 
-| Component | Part |
-|---|---|
-| MCU | ESP32-WROOM-32 (DevKit V1, 30-pin) |
-| Wireless | NRF24L01+PA+LNA |
-| Display | SSD1306 OLED, 1.3", 128x64, I2C |
-| GPIO Expansion | MCP23017 (I2C) |
-| Regulator | MCP1700-3302E (3.3V LDO) |
-| Battery | 3.7V LiPo, JST-PH2.0 |
-| Charger | TP4056, USB-C, dual output |
+- Small SPI or I2C TFT/OLED display (roughly 0.9"–1.5" is typical for a corner status screen)
+
+**Power**
+
+- LiPo battery (single-cell, capacity to taste)
+- Battery charge/protection module (handles USB-C charging + over-discharge protection)
+- 3.3V voltage regulator (if your battery/charger output doesn't already give clean 3.3V)
+- USB-C connector (charging + optional wired/data mode)
+- Power slide switch
+
+**Support**
+
+- Pull-down (or pull-up) resistors for each button line, unless using MCU internal pull resistors
+- Small decoupling capacitors near MCU and radio modules
+- Status LED(s) (battery/pairing indicator — optional)
+- Protoboard or custom PCB
+- 3D-printed or laser-cut rectangular shell (NES-004 proportions, no shoulder-button cutouts)
+
+
+## Acknowledgments / Inspiration
+
+Design inspired by the NES 004 controller form factor.
